@@ -12,7 +12,7 @@ sealed interface SpotStatus {
 
     @Serializable
     @SerialName("occupied")
-    data class Occupied(val registrationPlate: String) : SpotStatus
+    data class Occupied(val licensePlate: String) : SpotStatus
 
     @Serializable
     @SerialName("unavailable")

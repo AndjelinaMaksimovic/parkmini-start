@@ -16,11 +16,11 @@ class ParkingRepository(
     private fun find(id: Int): ParkingSpot? = _spots.value.find { it.id == id }
 
     @Synchronized
-    fun occupy(id: Int, registrationPlate: String): ActionResult {
+    fun occupy(id: Int, licensePlate: String): ActionResult {
         val spot = find(id) ?: return ActionResult.NotFound(id)
         if (spot.status !is SpotStatus.Free) return ActionResult.Conflict("This spot is not free.")
 
-        val occupied = spot.copy(status = SpotStatus.Occupied(registrationPlate))
+        val occupied = spot.copy(status = SpotStatus.Occupied(licensePlate))
         replace(occupied)
         return ActionResult.Success(occupied)
     }
@@ -32,11 +32,11 @@ class ParkingRepository(
     }
 
     @Synchronized
-    fun relase(id: Int, registrationPlate: String): ActionResult {
+    fun relase(id: Int, licensePlate: String): ActionResult {
         val spot = find(id) ?: return ActionResult.NotFound(id)
         val status = spot.status
         if (status !is SpotStatus.Occupied ||
-            status.registrationPlate != registrationPlate
+            status.licensePlate != licensePlate
         )
             return ActionResult.Conflict("This spot is not free.")
         val free = spot.copy(status = SpotStatus.Free)
