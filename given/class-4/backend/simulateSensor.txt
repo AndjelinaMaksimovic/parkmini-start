@@ -1,7 +1,7 @@
-// Class 3, Task 5: paste this block INTO the class ParkingRepository, below the function release().
-// Add these imports at the top of ParkingRepository.kt if IntelliJ does not offer them:
-//   import com.v1.parkmini.models.SIMULATED_PREFIX
-//   import com.v1.parkmini.models.randomSimulatedPlate
+// Class 4, Task 5: paste this block INTO the class ParkingRepository, below the function release().
+// If IntelliJ does not offer the imports, add these at the top of ParkingRepository.kt:
+//   import com.v1.parkmini.SIMULATED_PREFIX
+//   import com.v1.parkmini.randomSimulatedPlate
 //   import kotlin.random.Random
 
     /*

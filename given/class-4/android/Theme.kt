@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.v1.parkmini.shared.SpotStatus
 
-// Task 7 | GIVEN (ready code)
 @Composable
 fun ParkMiniTheme(content: @Composable () -> Unit) {
     MaterialTheme(
@@ -15,7 +14,6 @@ fun ParkMiniTheme(content: @Composable () -> Unit) {
     )
 }
 
-// Task 7 | GIVEN (ready code)
 val FreeColor = Color(0xFF43A047)
 val OccupiedColor = Color(0xFFE53935)
 val UnavailableColor = Color(0xFF1E88E5)

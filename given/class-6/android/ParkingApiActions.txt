@@ -1,0 +1,20 @@
+// Class 6, Task 10: paste the two private functions INTO the class ParkingApi, below spots().
+// Paste ApiException at the very bottom of ParkingApi.kt (outside the class).
+// Add the missing imports with Alt+Enter (post, setBody, ContentType, contentType, HttpResponse, bodyAsText, isSuccess, body).
+
+    private suspend fun postAction(id: Int, action: String, licensePlate: String): ParkingSpot =
+        client.post("$baseUrl/api/spots/$id/$action") {
+            contentType(ContentType.Application.Json)
+            setBody(LicensePlateRequest(licensePlate))
+        }.parse()
+
+    private suspend inline fun <reified T> HttpResponse.parse(): T {
+        if (status.isSuccess()) return body()
+        // The server answers errors with a short text, e.g. "Spot A2 is not free".
+        val message = bodyAsText().ifBlank { "Error ${status.value}" }
+        throw ApiException(message)
+    }
+
+// ---- at the bottom of the file, outside the class ----
+
+class ApiException(message: String) : Exception(message)

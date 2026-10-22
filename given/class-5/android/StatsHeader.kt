@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.v1.parkmini.shared.Stats
 
-// Task 8 | GIVEN (ready code) (isOffline is used in Task 9, licensePlate in Task 10)
 @Composable
 fun StatsHeader(stats: Stats, isOffline: Boolean, licensePlate: String) {
     Card(Modifier.fillMaxWidth()) {
