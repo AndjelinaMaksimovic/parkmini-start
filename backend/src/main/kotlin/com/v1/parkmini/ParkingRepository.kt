@@ -6,6 +6,7 @@ import com.v1.parkmini.shared.SpotStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlin.random.Random
 
 class ParkingRepository(
     initial: List<ParkingSpot>
@@ -44,5 +45,42 @@ class ParkingRepository(
         return ActionResult.Success(free)
     }
 
+    /*
+    * The server changes the state of the parking lot by itself, as if real sensors were installed.
+    * Every 2 to 6 seconds, one spot changes:
+    * 	- a free spot becomes OCCUPIED (a car arrives) or
+    *   - an occupied spot becomes FREE (a car leaves).
+    *
+    * The sensors keep the occupancy between 20% and 70%:
+    * when the lot is too empty, cars arrive; when it is too full, cars leave.
+    * The sensors never touch an unavailable spot, or a spot occupied by a driver of the app.
+    * */
+    @Synchronized
+    fun simulateSensor() {
+        val usable = _spots.value.filter { it.status !is SpotStatus.Unavailable }
+        val busy = usable.count { it.status is SpotStatus.Occupied }
+        val ratio = busy.toDouble() / usable.size
 
+        val shouldOccupy = when {
+            ratio < 0.2 -> true      // too empty: a car arrives
+            ratio > 0.7 -> false     // too full: a car leaves
+            else -> Random.nextBoolean()
+        }
+        val candidate =
+            if (shouldOccupy) {
+                usable.filter { it.status is SpotStatus.Free }.randomOrNull()
+            } else {
+                usable.filter { it.isSimulatedCar() }.randomOrNull()
+            }
+        if (candidate != null) {
+            val newStatus = if (shouldOccupy) SpotStatus.Occupied(randomSimulatedPlate()) else SpotStatus.Free
+            replace(candidate.copy(status = newStatus))
+        }
+    }
+
+    // the cars of the sensors have a plate like SIM-123, the drivers of the app never do
+    private fun ParkingSpot.isSimulatedCar(): Boolean {
+        val status = status
+        return status is SpotStatus.Occupied && status.licensePlate.startsWith(SIMULATED_PREFIX)
+    }
 }
