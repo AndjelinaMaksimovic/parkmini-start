@@ -14,7 +14,7 @@ fun sampleSpots(occupiedShare: Double): List<ParkingSpot> {
             val status = when {
                 zone == Zone.C && num == 6 -> SpotStatus.Unavailable
                 Random.nextDouble() < occupiedShare
-                    -> SpotStatus.Occupied("sample")
+                    -> SpotStatus.Occupied(randomSimulatedPlate())
 
                 else -> SpotStatus.Free
             }
@@ -25,3 +25,7 @@ fun sampleSpots(occupiedShare: Double): List<ParkingSpot> {
 
     return spots
 }
+
+const val SIMULATED_PREFIX = "SIM-"
+
+fun randomSimulatedPlate(): String = "$SIMULATED_PREFIX${Random.nextInt(100, 1000)}"

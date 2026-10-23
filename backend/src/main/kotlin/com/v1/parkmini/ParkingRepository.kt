@@ -32,7 +32,7 @@ class ParkingRepository(
     }
 
     @Synchronized
-    fun relase(id: Int, licensePlate: String): ActionResult {
+    fun release(id: Int, licensePlate: String): ActionResult {
         val spot = find(id) ?: return ActionResult.NotFound(id)
         val status = spot.status
         if (status !is SpotStatus.Occupied ||
